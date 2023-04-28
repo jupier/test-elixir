@@ -1,7 +1,15 @@
 defmodule Geo do
+  # Circle shapes drawn using https://www.calcmaps.com/map-radius/
+
+  @type latitude :: float()
+  @type longitude :: float()
   @type continent :: :europe | :northamerica | :africa | :australia | :asia | :other
 
-  # Draw using https://www.calcmaps.com/map-radius/
+  @spec isCoordinatesInArea?(latitude, longitude, Geocalc.Shape.Circle.t()) :: boolean
+  defp isCoordinatesInArea?(lat, lon, area) do
+    point = %{lat: lat, lng: lon}
+    Geocalc.in_area?(area, point)
+  end
 
   # Europe
   # Radius: 2181215 m | 2181.21 km | 1355.34 mi | 7156217 ft | 1177.76 nm
@@ -12,7 +20,6 @@ defmodule Geo do
   # Radius: 591047 m | 591.05 km | 367.26 mi | 1939130 ft | 319.14 nm
   # Circle Area: 1097472125815 m2 | 1097472.13 km2
   # Lat,Lon: 41.17816,-4.24584
-
   defp isInEurope(latitude, longitude) do
     europe = %Geocalc.Shape.Circle{
       latitude: 56.54461,
@@ -26,19 +33,14 @@ defmodule Geo do
       radius: 591_047
     }
 
-    point = %{lat: latitude, lng: longitude}
-    Geocalc.in_area?(europe, point) || Geocalc.in_area?(spainAndPortugal, point)
+    isCoordinatesInArea?(latitude, longitude, europe) ||
+      isCoordinatesInArea?(latitude, longitude, spainAndPortugal)
   end
 
   # North America
-  # Radius: 4128146 m | 4128.15 km | 2565.11 mi | 13543788 ft | 2229.02 nm
-  # Circle Area: 53537740280051 m2 | 53537740.28 km2
-  # Lat,Lon: 48.69096,-102.30479
-
   # Radius: 4339075 m | 4339.07 km | 2696.18 mi | 14235809 ft | 2342.91 nm
   # Circle Area: 59148550160090 m2 | 59148550.16 km2
   # Lat,Lon: 43.58039,-108.28788
-
   defp isInNorthAmerica(latitude, longitude) do
     northAmerica = %Geocalc.Shape.Circle{
       latitude: 43.58039,
@@ -46,8 +48,7 @@ defmodule Geo do
       radius: 4_339_075
     }
 
-    point = %{lat: latitude, lng: longitude}
-    Geocalc.in_area?(northAmerica, point)
+    isCoordinatesInArea?(latitude, longitude, northAmerica)
   end
 
   # Africa
@@ -62,15 +63,13 @@ defmodule Geo do
       radius: 4_288_616
     }
 
-    point = %{lat: latitude, lng: longitude}
-    Geocalc.in_area?(africa, point)
+    isCoordinatesInArea?(latitude, longitude, africa)
   end
 
   # Asia
   # Radius: 5255297 m | 5255.30 km | 3265.49 mi | 17241790 ft | 2837.63 nm
   # Circle Area: 86764979261076 m2 | 86764979.26 km2
   # Lat,Lon: 34.30714,96.69073
-
   defp isInAsia(latitude, longitude) do
     asia = %Geocalc.Shape.Circle{
       latitude: 34.30714,
@@ -78,15 +77,13 @@ defmodule Geo do
       radius: 5_255_297
     }
 
-    point = %{lat: latitude, lng: longitude}
-    Geocalc.in_area?(asia, point)
+    isCoordinatesInArea?(latitude, longitude, asia)
   end
 
   # Australia
   # Radius: 3230549 m | 3230.55 km | 2007.37 mi | 10598913 ft | 1744.36 nm
   # Circle Area: 32787058546523 m2 | 32787058.55 km2
   # Lat,Lon: -25.89887,146.40949
-
   defp isInAustralia(latitude, longitude) do
     australia = %Geocalc.Shape.Circle{
       latitude: -25.89887,
@@ -94,8 +91,7 @@ defmodule Geo do
       radius: 3_230_549
     }
 
-    point = %{lat: latitude, lng: longitude}
-    Geocalc.in_area?(australia, point)
+    isCoordinatesInArea?(latitude, longitude, australia)
   end
 
   @doc ~S"""
@@ -141,7 +137,7 @@ defmodule Geo do
       :other
 
   """
-  @spec getContinent(float(), float()) :: continent
+  @spec getContinent(latitude(), longitude()) :: continent
   def getContinent(latitude, longitude) do
     cond do
       isInEurope(latitude, longitude) -> :europe
