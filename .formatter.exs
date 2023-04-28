@@ -1,3 +1,3 @@
 [
-  inputs: ["*.exs", "src/*.{ex}"]
+  inputs: ["*.exs", "lib/*.{ex}"]
 ]
