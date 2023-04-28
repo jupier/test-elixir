@@ -4,7 +4,8 @@ defmodule CSVParser do
           contractType: String.t(),
           name: String.t(),
           latitude: float(),
-          longitude:      float()
+          longitude: float(),
+          continent: Geo.continent()
         }
   @type jobs :: [job]
   @type profession :: %{id: integer(), name: String.t(), category: String.t()}
@@ -36,7 +37,7 @@ defmodule CSVParser do
     # Reject all the rows containing a blank value
     # Not sure if it's a good idea, but that was necessary to properly
     # convert the value in integer or float
-    |> Stream.reject(&(isAnyKeyBlank(&1)))
+    |> Stream.reject(&isAnyKeyBlank(&1))
     |> Stream.map(&func.(&1))
     |> Enum.to_list()
   end
@@ -54,15 +55,19 @@ defmodule CSVParser do
         "profession_id" => id,
         "contract_type" => contractType,
         "name" => name,
-        "office_latitude" => latitude,
-        "office_longitude" => longitude
+        "office_latitude" => latitudeStr,
+        "office_longitude" => longitudeStr
       } ->
+        lat = String.to_float(latitudeStr)
+        lon = String.to_float(longitudeStr)
+
         %{
           professionId: String.to_integer(id),
           contractType: contractType,
           name: name,
-          latitude: String.to_float(latitude),
-          longitude: String.to_float(longitude)
+          latitude: lat,
+          longitude: lon,
+          continent: Geo.getContinent(lat, lon)
         }
     end
   end
@@ -106,14 +111,16 @@ defmodule CSVParser do
         latitude: 48.1392154,
         longitude: 11.5781413,
         name: "[Louis Vuitton Germany] Praktikant (m/w) im Bereich Digital Retail (E-Commerce)",
-        professionId: 7
+        professionId: 7,
+        continent: :europe
       },
       %{
         contractType: "INTERNSHIP",
         latitude: 48.885247,
         longitude: 2.3566441,
         name: "Bras droit de la fondatrice",
-        professionId: 5
+        professionId: 5,
+        continent: :europe
       }]
   """
   @spec parseJobs() :: [job]
