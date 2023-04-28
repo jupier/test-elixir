@@ -13,7 +13,7 @@ defmodule Geo do
   # Circle Area: 1097472125815 m2 | 1097472.13 km2
   # Lat,Lon: 41.17816,-4.24584
 
-  def isInEurope(latitude, longitude) do
+  defp isInEurope(latitude, longitude) do
     europe = %Geocalc.Shape.Circle{
       latitude: 56.54461,
       longitude: 10.91914,
@@ -39,7 +39,7 @@ defmodule Geo do
   # Circle Area: 59148550160090 m2 | 59148550.16 km2
   # Lat,Lon: 43.58039,-108.28788
 
-  def isInNorthAmerica(latitude, longitude) do
+  defp isInNorthAmerica(latitude, longitude) do
     northAmerica = %Geocalc.Shape.Circle{
       latitude: 43.58039,
       longitude: -108.28788,
@@ -55,7 +55,7 @@ defmodule Geo do
   # Circle Area: 57780874169219 m2 | 57780874.17 km2
   # Lat,Lon: -0.35156,9.14677
 
-  def isInAfrica(latitude, longitude) do
+  defp isInAfrica(latitude, longitude) do
     africa = %Geocalc.Shape.Circle{
       latitude: -0.35156,
       longitude: 9.14677,
@@ -71,7 +71,7 @@ defmodule Geo do
   # Circle Area: 86764979261076 m2 | 86764979.26 km2
   # Lat,Lon: 34.30714,96.69073
 
-  def isInAsia(latitude, longitude) do
+  defp isInAsia(latitude, longitude) do
     asia = %Geocalc.Shape.Circle{
       latitude: 34.30714,
       longitude: 96.69073,
@@ -87,7 +87,7 @@ defmodule Geo do
   # Circle Area: 32787058546523 m2 | 32787058.55 km2
   # Lat,Lon: -25.89887,146.40949
 
-  def isInAustralia(latitude, longitude) do
+  defp isInAustralia(latitude, longitude) do
     australia = %Geocalc.Shape.Circle{
       latitude: -25.89887,
       longitude: 146.40949,
