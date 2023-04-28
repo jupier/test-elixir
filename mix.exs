@@ -24,6 +24,7 @@ defmodule TestElixir.MixProject do
   defp deps do
     [
       {:csv, "3.0.5"},
+      {:geocalc, "0.8.5"},
       {:dialyxir, "1.3.0", only: [:dev, :test], runtime: false}
     ]
   end
