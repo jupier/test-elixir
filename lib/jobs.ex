@@ -1,22 +1,20 @@
 defmodule Jobs do
   @type job :: %{
-          professionId: integer(),
           professionCategory: Professions.professionCategory(),
-          contractType: String.t(),
-          name: String.t(),
-          latitude: float(),
-          longitude: float(),
           continent: Geo.continent()
         }
   @type t :: [job]
+end
 
-  @spec getJobs(Professions.t()) :: t()
+defmodule JobsService do
+  @doc """
+    Return all the jobs
+  """
+  @spec getJobs(Professions.t()) :: Jobs.t()
   def getJobs(professions) do
     CSVParser.parseJobs(professions)
   end
-end
 
-defmodule JobsInfo do
   @doc """
       Return the number of jobs by continents and categories
   """
@@ -36,7 +34,9 @@ defmodule JobsInfo do
   """
   @spec getContinents(Jobs.t()) :: [Geo.continent()]
   def getContinents(jobs) do
-    jobs |> Enum.map(fn %{continent: c} -> c end) |> Enum.uniq() |> Enum.sort()
+    jobs
+    |> Enum.reduce(MapSet.new(), fn %{continent: c}, acc -> MapSet.put(acc, c) end)
+    |> Enum.sort()
   end
 
   @doc """
@@ -45,8 +45,7 @@ defmodule JobsInfo do
   @spec getCategories(Jobs.t()) :: [Professions.professionCategory()]
   def getCategories(jobs) do
     jobs
-    |> Enum.map(fn %{professionCategory: c} -> c end)
-    |> Enum.uniq()
+    |> Enum.reduce(MapSet.new(), fn %{professionCategory: c}, acc -> MapSet.put(acc, c) end)
     |> Enum.sort()
   end
 
@@ -55,19 +54,8 @@ defmodule JobsInfo do
   """
   @spec totalByCategories(Jobs.t()) :: %{Professions.professionCategory() => integer()}
   def totalByCategories(jobs) do
-    categories = getCategories(jobs)
-
     getNumberOfJobsByContinentsAndCategories(jobs)
-    |> Map.values()
-    |> Enum.reduce(
-      %{},
-      fn value, acc ->
-        Enum.reduce(categories, acc, fn category, acc2 ->
-          inc = Map.get(value, category, 0)
-          Map.update(acc2, category, inc, &(&1 + inc))
-        end)
-      end
-    )
+    |> Enum.reduce(%{}, fn {_, v}, acc -> Map.merge(v, acc, fn _, v1, v2 -> v1 + v2 end) end)
   end
 
   @doc """

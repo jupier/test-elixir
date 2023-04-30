@@ -36,8 +36,8 @@ defmodule CSVParser do
   @spec transformRowIntoProfession(map()) :: Professions.profession()
   defp transformRowIntoProfession(row) do
     case row do
-      %{"id" => id, "name" => name, "category_name" => category} ->
-        %{id: String.to_integer(id), name: name, category: category}
+      %{"id" => id, "category_name" => category} ->
+        {String.to_integer(id), category}
     end
   end
 
@@ -46,8 +46,6 @@ defmodule CSVParser do
     case row do
       %{
         "profession_id" => id,
-        "contract_type" => contractType,
-        "name" => name,
         "office_latitude" => latitudeStr,
         "office_longitude" => longitudeStr
       } ->
@@ -56,13 +54,8 @@ defmodule CSVParser do
         professionId = String.to_integer(id)
 
         %{
-          professionId: professionId,
           professionCategory:
-            ProfessionsInfo.getProfessionCategoryForProfessionId(professions, professionId),
-          contractType: contractType,
-          name: name,
-          latitude: lat,
-          longitude: lon,
+            ProfessionsService.getProfessionCategoryForProfessionId(professions, professionId),
           continent: Geo.getContinentForCoordinates(lat, lon)
         }
     end
@@ -73,18 +66,15 @@ defmodule CSVParser do
     Parse the CSV file containing the professions and put the result in a profession list
 
     ## Examples
-      iex> CSVParser.parseProfessions()
-      iex> |> Enum.take(2)
-      [%{
-        id: 17,
-        name: "Devops / Infrastructure",
-        category: "Tech"
-      },
-      %{
-        id: 24,
-        name: "Compta / Contrôle de Gestion",
-        category: "Admin"
-      }]
+      iex> Map.get(CSVParser.parseProfessions(), 17)
+      "Tech"
+
+      iex> Map.get(CSVParser.parseProfessions(), 25)
+      "Admin"
+
+      iex> Map.get(CSVParser.parseProfessions(), 4)
+      "Marketing / Comm'"
+
   """
   @spec parseProfessions() :: Professions.t()
   def parseProfessions() do
@@ -92,6 +82,8 @@ defmodule CSVParser do
       "resources/technical-test-professions.csv",
       &transformRowIntoProfession/1
     )
+    # Here Map.new creates a Map from Tuples
+    |> Map.new()
   end
 
   @doc ~S"""
