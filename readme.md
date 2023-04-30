@@ -12,6 +12,9 @@ Elixir 1.14.4 (compiled with Erlang/OTP 25)
 
 - The project uses `mix` as build tool. Run `mix deps.get` to install the dependencies.
 
+- `rebar` is needed to build the project dependencies (`telemetry` used by `plug_cowboy`).
+  You may need to install it by running `mix local.rebar`
+
 # Questions
 
 - Why this code does compile (dialyzer does not complain)?

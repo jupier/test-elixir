@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+table, th, td {
+  border:1px solid black;
+}
+th {
+  text-transform: uppercase;
+}
+td {
+  text-align: right;
+}
+</style>
+</head>
+<body>
+<table style="width:100%">
+
+
+  <tr>
+    <th></th>
+    <th>Total</th>
+    <%= for category <- categories do %>
+      <th><%= category %></th>
+    <% end %>
+  </tr>
+
+  <tr>
+    <th>Total</th>
+    <td><%= total %></td>
+    <%= for category <- categories do %>
+      <td><%= Map.get(totalByCategories, category, 0) %></td>
+    <% end %>
+  </tr>
+  <%= for continent <- continents do %>
+    <tr>
+      <th><%= continent %></th>
+      <td><%= Map.get(totalByContinents, continent, 0) %></td>
+      <% valuesForContinent = numberOfJobsByContinentsAndCategories[continent] %>
+      <%= for category <- categories do %>
+        <td><%= Map.get(valuesForContinent, category, 0) %></td>
+      <% end %>
+
+    </tr>
+  <% end %>
+</table>
+</body>
+</html>
