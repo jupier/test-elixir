@@ -1,27 +1,25 @@
 defmodule Jobs do
   @type job :: %{
-          professionId: integer(),
           professionCategory: Professions.professionCategory(),
-          contractType: String.t(),
-          name: String.t(),
-          latitude: float(),
-          longitude: float(),
-          continent: Geo.continent()
+          continent: Continents.continent()
         }
   @type t :: [job]
+end
 
-  @spec getJobs(Professions.t()) :: t()
+defmodule JobsService do
+  @doc """
+    Return all the jobs
+  """
+  @spec getJobs(Professions.t()) :: Jobs.t()
   def getJobs(professions) do
     CSVParser.parseJobs(professions)
   end
-end
 
-defmodule JobsInfo do
   @doc """
       Return the number of jobs by continents and categories
   """
   @spec getNumberOfJobsByContinentsAndCategories(Jobs.t()) :: %{
-          Geo.continent() => %{Professions.professionCategory() => integer()}
+          Continents.continent() => %{Professions.professionCategory() => integer()}
         }
   def getNumberOfJobsByContinentsAndCategories(jobs) do
     jobs
@@ -34,9 +32,11 @@ defmodule JobsInfo do
   @doc """
       Return all the continents
   """
-  @spec getContinents(Jobs.t()) :: [Geo.continent()]
+  @spec getContinents(Jobs.t()) :: [Continents.continent()]
   def getContinents(jobs) do
-    jobs |> Enum.map(fn %{continent: c} -> c end) |> Enum.uniq() |> Enum.sort()
+    jobs
+    |> Enum.reduce(MapSet.new(), fn %{continent: c}, acc -> MapSet.put(acc, c) end)
+    |> Enum.sort()
   end
 
   @doc """
@@ -45,8 +45,7 @@ defmodule JobsInfo do
   @spec getCategories(Jobs.t()) :: [Professions.professionCategory()]
   def getCategories(jobs) do
     jobs
-    |> Enum.map(fn %{professionCategory: c} -> c end)
-    |> Enum.uniq()
+    |> Enum.reduce(MapSet.new(), fn %{professionCategory: c}, acc -> MapSet.put(acc, c) end)
     |> Enum.sort()
   end
 
@@ -55,25 +54,14 @@ defmodule JobsInfo do
   """
   @spec totalByCategories(Jobs.t()) :: %{Professions.professionCategory() => integer()}
   def totalByCategories(jobs) do
-    categories = getCategories(jobs)
-
     getNumberOfJobsByContinentsAndCategories(jobs)
-    |> Map.values()
-    |> Enum.reduce(
-      %{},
-      fn value, acc ->
-        Enum.reduce(categories, acc, fn category, acc2 ->
-          inc = Map.get(value, category, 0)
-          Map.update(acc2, category, inc, &(&1 + inc))
-        end)
-      end
-    )
+    |> Enum.reduce(%{}, fn {_, v}, acc -> Map.merge(v, acc, fn _, v1, v2 -> v1 + v2 end) end)
   end
 
   @doc """
       Total by continents
   """
-  @spec totalByContinents(Jobs.t()) :: %{Geo.continent() => integer()}
+  @spec totalByContinents(Jobs.t()) :: %{Continents.continent() => integer()}
   def totalByContinents(jobs) do
     getNumberOfJobsByContinentsAndCategories(jobs)
     |> Enum.reduce(%{}, fn {k, v}, acc ->
