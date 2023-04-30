@@ -14,6 +14,13 @@ defmodule TestElixir.MixProject do
     ]
   end
 
+  def application do
+    [
+      extra_applications: [:eex, :logger],
+      mod: {Main.Application, []}
+    ]
+  end
+
   defp aliases do
     [
       c: "compile",
@@ -25,6 +32,7 @@ defmodule TestElixir.MixProject do
     [
       {:csv, "3.0.5"},
       {:geocalc, "0.8.5"},
+      {:plug_cowboy, "2.6.1"},
       {:dialyxir, "1.3.0", only: [:dev, :test], runtime: false}
     ]
   end
