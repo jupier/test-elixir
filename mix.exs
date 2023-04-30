@@ -24,7 +24,8 @@ defmodule TestElixir.MixProject do
   defp aliases do
     [
       c: "compile",
-      test: ["test --cover", "dialyzer"]
+      test: ["test --cover", "dialyzer"],
+      run: ["run --no-halt"]
     ]
   end
 
