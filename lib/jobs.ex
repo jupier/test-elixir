@@ -1,7 +1,7 @@
 defmodule Jobs do
   @type job :: %{
           professionCategory: Professions.professionCategory(),
-          continent: Geo.continent()
+          continent: Continents.continent()
         }
   @type t :: [job]
 end
@@ -19,7 +19,7 @@ defmodule JobsService do
       Return the number of jobs by continents and categories
   """
   @spec getNumberOfJobsByContinentsAndCategories(Jobs.t()) :: %{
-          Geo.continent() => %{Professions.professionCategory() => integer()}
+          Continents.continent() => %{Professions.professionCategory() => integer()}
         }
   def getNumberOfJobsByContinentsAndCategories(jobs) do
     jobs
@@ -32,7 +32,7 @@ defmodule JobsService do
   @doc """
       Return all the continents
   """
-  @spec getContinents(Jobs.t()) :: [Geo.continent()]
+  @spec getContinents(Jobs.t()) :: [Continents.continent()]
   def getContinents(jobs) do
     jobs
     |> Enum.reduce(MapSet.new(), fn %{continent: c}, acc -> MapSet.put(acc, c) end)
@@ -61,7 +61,7 @@ defmodule JobsService do
   @doc """
       Total by continents
   """
-  @spec totalByContinents(Jobs.t()) :: %{Geo.continent() => integer()}
+  @spec totalByContinents(Jobs.t()) :: %{Continents.continent() => integer()}
   def totalByContinents(jobs) do
     getNumberOfJobsByContinentsAndCategories(jobs)
     |> Enum.reduce(%{}, fn {k, v}, acc ->

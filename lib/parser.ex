@@ -56,7 +56,7 @@ defmodule CSVParser do
         %{
           professionCategory:
             ProfessionsService.getProfessionCategoryForProfessionId(professions, professionId),
-          continent: Geo.getContinentForCoordinates(lat, lon)
+          continent: Continents.getContinentForCoordinates(lat, lon)
         }
     end
   end
