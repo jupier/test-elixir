@@ -101,44 +101,44 @@ defmodule Geo do
     ## Examples
 
       # Melbourne
-      iex> Geo.getContinent(-37.814479, 144.965794)
+      iex> Geo.getContinentForCoordinates(-37.814479, 144.965794)
       :australia
 
       # Paris
-      iex> Geo.getContinent(48.8588897, 2.320041)
+      iex> Geo.getContinentForCoordinates(48.8588897, 2.320041)
       :europe
 
       # Lisbonne
-      iex> Geo.getContinent(38.6979940, -9.1265504)
+      iex> Geo.getContinentForCoordinates(38.6979940, -9.1265504)
       :europe
 
       # Moscou
-      iex> Geo.getContinent(55.7504461, 37.6174943)
+      iex> Geo.getContinentForCoordinates(55.7504461, 37.6174943)
       :europe
 
       # Moscou
-      iex> Geo.getContinent(55.7504461, 37.6174943)
+      iex> Geo.getContinentForCoordinates(55.7504461, 37.6174943)
       :europe
 
       # Pekin
-      iex> Geo.getContinent(39.8919532, 116.4442401)
+      iex> Geo.getContinentForCoordinates(39.8919532, 116.4442401)
       :asia
 
       # Le Caire
-      iex> Geo.getContinent(30.0443879, 31.2357257)
+      iex> Geo.getContinentForCoordinates(30.0443879, 31.2357257)
       :africa
 
       # New York
-      iex> Geo.getContinent(40.7127281, -74.0060152)
+      iex> Geo.getContinentForCoordinates(40.7127281, -74.0060152)
       :northamerica
 
       # Other (pacific ocean)
-      iex> Geo.getContinent(42.7341014, -175.879978)
+      iex> Geo.getContinentForCoordinates(42.7341014, -175.879978)
       :other
 
   """
-  @spec getContinent(latitude(), longitude()) :: continent
-  def getContinent(latitude, longitude) do
+  @spec getContinentForCoordinates(latitude(), longitude()) :: continent
+  def getContinentForCoordinates(latitude, longitude) do
     cond do
       isInEurope(latitude, longitude) -> :europe
       isInNorthAmerica(latitude, longitude) -> :northamerica

@@ -1,16 +1,4 @@
 defmodule CSVParser do
-  @type job :: %{
-          professionId: integer(),
-          contractType: String.t(),
-          name: String.t(),
-          latitude: float(),
-          longitude: float(),
-          continent: Geo.continent()
-        }
-  @type jobs :: [job]
-  @type profession :: %{id: integer(), name: String.t(), category: String.t()}
-  @type professions :: [profession]
-
   @doc ~S"""
 
     Check if the map contains a blank string
@@ -28,7 +16,10 @@ defmodule CSVParser do
 
   """
   def isAnyKeyBlank(map) do
-    Enum.any?(Map.values(map), &(String.length(&1) === 0))
+    Enum.any?(Map.values(map), fn str ->
+      isBlank = String.length(str) === 0
+      isBlank
+    end)
   end
 
   defp parseAndTransformCSVFile(fileName, func) do
@@ -42,6 +33,7 @@ defmodule CSVParser do
     |> Enum.to_list()
   end
 
+  @spec transformRowIntoProfession(map()) :: Professions.profession()
   defp transformRowIntoProfession(row) do
     case row do
       %{"id" => id, "name" => name, "category_name" => category} ->
@@ -49,6 +41,7 @@ defmodule CSVParser do
     end
   end
 
+  @spec transformRowIntoJob(map()) :: Jobs.job()
   defp transformRowIntoJob(row) do
     case row do
       %{
@@ -60,14 +53,16 @@ defmodule CSVParser do
       } ->
         lat = String.to_float(latitudeStr)
         lon = String.to_float(longitudeStr)
+        professionId = String.to_integer(id)
 
         %{
-          professionId: String.to_integer(id),
+          professionId: professionId,
+          professionCategory: Professions.getProfessionCategoryForProfessionId(professionId),
           contractType: contractType,
           name: name,
           latitude: lat,
           longitude: lon,
-          continent: Geo.getContinent(lat, lon)
+          continent: Geo.getContinentForCoordinates(lat, lon)
         }
     end
   end
@@ -90,7 +85,7 @@ defmodule CSVParser do
         category: "Admin"
       }]
   """
-  @spec parseProfessions() :: professions
+  @spec parseProfessions() :: Professions.professions()
   def parseProfessions() do
     parseAndTransformCSVFile(
       "resources/technical-test-professions.csv",
@@ -112,7 +107,8 @@ defmodule CSVParser do
         longitude: 11.5781413,
         name: "[Louis Vuitton Germany] Praktikant (m/w) im Bereich Digital Retail (E-Commerce)",
         professionId: 7,
-        continent: :europe
+        continent: :europe,
+        professionCategory: "Marketing / Comm'"
       },
       %{
         contractType: "INTERNSHIP",
@@ -120,10 +116,11 @@ defmodule CSVParser do
         longitude: 2.3566441,
         name: "Bras droit de la fondatrice",
         professionId: 5,
-        continent: :europe
+        continent: :europe,
+        professionCategory: "Business"
       }]
   """
-  @spec parseJobs() :: [job]
+  @spec parseJobs() :: Jobs.jobs()
   def parseJobs() do
     parseAndTransformCSVFile(
       "resources/technical-test-jobs.csv",
