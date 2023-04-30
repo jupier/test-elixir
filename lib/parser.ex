@@ -41,8 +41,8 @@ defmodule CSVParser do
     end
   end
 
-  @spec transformRowIntoJob(map()) :: Jobs.job()
-  defp transformRowIntoJob(row) do
+  @spec transformRowIntoJob(Professions.t(), map()) :: Jobs.job()
+  defp transformRowIntoJob(professions, row) do
     case row do
       %{
         "profession_id" => id,
@@ -57,7 +57,8 @@ defmodule CSVParser do
 
         %{
           professionId: professionId,
-          professionCategory: Professions.getProfessionCategoryForProfessionId(professionId),
+          professionCategory:
+            ProfessionsInfo.getProfessionCategoryForProfessionId(professions, professionId),
           contractType: contractType,
           name: name,
           latitude: lat,
@@ -97,34 +98,12 @@ defmodule CSVParser do
 
     Parse the CSV file containing the jobs and put the result in a job list
 
-    ## Examples
-
-      iex> CSVParser.parseJobs()
-      iex> |> Enum.take(2)
-      [%{
-        contractType: "INTERNSHIP",
-        latitude: 48.1392154,
-        longitude: 11.5781413,
-        name: "[Louis Vuitton Germany] Praktikant (m/w) im Bereich Digital Retail (E-Commerce)",
-        professionId: 7,
-        continent: :europe,
-        professionCategory: "Marketing / Comm'"
-      },
-      %{
-        contractType: "INTERNSHIP",
-        latitude: 48.885247,
-        longitude: 2.3566441,
-        name: "Bras droit de la fondatrice",
-        professionId: 5,
-        continent: :europe,
-        professionCategory: "Business"
-      }]
   """
-  @spec parseJobs() :: Jobs.t()
-  def parseJobs() do
+  @spec parseJobs(Professions.t()) :: Jobs.t()
+  def parseJobs(professions) do
     parseAndTransformCSVFile(
       "resources/technical-test-jobs.csv",
-      &transformRowIntoJob/1
+      fn row -> transformRowIntoJob(professions, row) end
     )
   end
 end

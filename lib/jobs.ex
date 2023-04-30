@@ -10,9 +10,9 @@ defmodule Jobs do
         }
   @type t :: [job]
 
-  @spec getJobs() :: t()
-  def getJobs() do
-    CSVParser.parseJobs()
+  @spec getJobs(Professions.t()) :: t()
+  def getJobs(professions) do
+    CSVParser.parseJobs(professions)
   end
 end
 
@@ -20,10 +20,10 @@ defmodule JobsInfo do
   @doc """
       Return the number of jobs by continents and categories
   """
-  @spec getJobNumberByContinentsAndCategories(Jobs.t()) :: %{
+  @spec getNumberOfJobsByContinentsAndCategories(Jobs.t()) :: %{
           Geo.continent() => %{Professions.professionCategory() => integer()}
         }
-  def getJobNumberByContinentsAndCategories(jobs) do
+  def getNumberOfJobsByContinentsAndCategories(jobs) do
     jobs
     |> Enum.reduce(%{}, fn %{continent: continent, professionCategory: category}, acc ->
       categories = Map.get(acc, continent, %{}) |> Map.update(category, 1, &(&1 + 1))
@@ -57,7 +57,7 @@ defmodule JobsInfo do
   def totalByCategories(jobs) do
     categories = getCategories(jobs)
 
-    getJobNumberByContinentsAndCategories(jobs)
+    getNumberOfJobsByContinentsAndCategories(jobs)
     |> Map.values()
     |> Enum.reduce(
       %{},
@@ -75,7 +75,7 @@ defmodule JobsInfo do
   """
   @spec totalByContinents(Jobs.t()) :: %{Geo.continent() => integer()}
   def totalByContinents(jobs) do
-    getJobNumberByContinentsAndCategories(jobs)
+    getNumberOfJobsByContinentsAndCategories(jobs)
     |> Enum.reduce(%{}, fn {k, v}, acc ->
       sum = Map.values(v) |> Enum.sum()
       Map.update(acc, k, sum, &(&1 + sum))

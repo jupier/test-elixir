@@ -2,10 +2,11 @@ defmodule JobsTest do
   use ExUnit.Case, async: true
   doctest Jobs
 
-  @jobs Jobs.getJobs()
+  @professions Professions.getProfessions()
+  @jobs Jobs.getJobs(@professions)
 
   test "Return the number of jobs by continents and categories" do
-    assert JobsInfo.getJobNumberByContinentsAndCategories(@jobs)
+    assert JobsInfo.getNumberOfJobsByContinentsAndCategories(@jobs)
     |> Map.get(:africa) === %{"Admin" => 1, "Business" => 1, "Marketing / Comm'" => 1, "Retail" => 8, "Tech" => 5}
   end
 

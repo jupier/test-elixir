@@ -30,14 +30,14 @@ td {
     <th>Total</th>
     <td><%= total %></td>
     <%= for category <- categories do %>
-      <td><%= Map.get(totalForCategories, category, 0) %></td>
+      <td><%= Map.get(totalByCategories, category, 0) %></td>
     <% end %>
   </tr>
   <%= for continent <- continents do %>
     <tr>
       <th><%= continent %></th>
-      <td><%= Map.get(totalForContinents, continent, 0) %></td>
-      <% valuesForContinent = values[continent] %>
+      <td><%= Map.get(totalByContinents, continent, 0) %></td>
+      <% valuesForContinent = numberOfJobsByContinentsAndCategories[continent] %>
       <%= for category <- categories do %>
         <td><%= Map.get(valuesForContinent, category, 0) %></td>
       <% end %>
