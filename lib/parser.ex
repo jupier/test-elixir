@@ -85,7 +85,7 @@ defmodule CSVParser do
         category: "Admin"
       }]
   """
-  @spec parseProfessions() :: Professions.professions()
+  @spec parseProfessions() :: Professions.t()
   def parseProfessions() do
     parseAndTransformCSVFile(
       "resources/technical-test-professions.csv",
@@ -120,7 +120,7 @@ defmodule CSVParser do
         professionCategory: "Business"
       }]
   """
-  @spec parseJobs() :: Jobs.jobs()
+  @spec parseJobs() :: Jobs.t()
   def parseJobs() do
     parseAndTransformCSVFile(
       "resources/technical-test-jobs.csv",

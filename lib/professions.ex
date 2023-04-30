@@ -2,7 +2,7 @@ defmodule Professions do
   @type professionId :: integer()
   @type professionCategory :: String.t()
   @type profession :: %{id: professionId(), name: String.t(), category: professionCategory()}
-  @type professions :: [profession]
+  @type t :: [profession]
 
   defp getProfessionsByProfessionId() do
     CSVParser.parseProfessions() |> Map.new(fn p -> {p.id, p} end)

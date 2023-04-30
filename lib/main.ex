@@ -5,14 +5,16 @@ defmodule Main.Router do
   plug(:dispatch)
 
   get "/" do
+    jobs = Jobs.getJobs()
+
     body =
       EEx.eval_file("lib/router/template/table.html.eex",
-        categories: Jobs.getCategories(),
-        totalForCategories: Jobs.totalByCategories(),
-        continents: Jobs.getContinents(),
-        totalForContinents: Jobs.totalByContinents(),
-        total: Jobs.totalOfJobs(),
-        values: Jobs.getJobNumberByContinentsAndCategories()
+        categories: JobsInfo.getCategories(jobs),
+        totalForCategories: JobsInfo.totalByCategories(jobs),
+        continents: JobsInfo.getContinents(jobs),
+        totalForContinents: JobsInfo.totalByContinents(jobs),
+        total: JobsInfo.totalOfJobs(jobs),
+        values: JobsInfo.getJobNumberByContinentsAndCategories(jobs)
       )
 
     send_resp(conn, 200, body)
