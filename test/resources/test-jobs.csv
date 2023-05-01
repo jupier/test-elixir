@@ -1,0 +1,6 @@
+profession_id,contract_type,name,office_latitude,office_longitude
+666,INTERNSHIP,[Louis Vuitton Germany] Praktikant (m/w) im Bereich Digital Retail (E-Commerce),48.1392154,11.5781413
+notaninteger,INTERNSHIP,Bras droit de la fondatrice,48.885247,2.3566441
+31,FULL_TIME,"[Louis Vuitton North America] Team Manager, RTW - NYC",notafloat,-73.973527
+24,INTERNSHIP,Stagiaire en Comptabilité et Gestion Administrative,48.8768868,notafloat
+17,FULL_TIME,Compliance Manager,48.8867578,2.3253786

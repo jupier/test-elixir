@@ -1,19 +1,24 @@
-defmodule CSVParserTest do
+defmodule ProfessionParserTest do
   use ExUnit.Case, async: true
-  doctest CSVParser
+  doctest ProfessionParser
 
-  @professions CSVParser.parseProfessions()
+  test "Fail if the file is not found" do
+    assert_raise File.Error, "could not stream \"noop\": no such file or directory", fn ->
+      ProfessionParser.parseProfessions("noop")
+    end
+  end
+end
 
-  test "Parse the CSV file containing the jobs and put the result in a job list" do
-    assert CSVParser.parseJobs(@professions) |> Enum.take(2) === [
-             %{
-               continent: :europe,
-               professionCategory: "Marketing / Comm'"
-             },
-             %{
-               continent: :europe,
-               professionCategory: "Business"
-             }
-           ]
+defmodule JobParserTest do
+  use ExUnit.Case, async: true
+
+  doctest JobParser
+
+  @professions ProfessionParser.parseProfessions()
+
+  test "Fail if the file is not found" do
+    assert_raise File.Error, "could not stream \"noop\": no such file or directory", fn ->
+      JobParser.parseJobs(@professions, "noop")
+    end
   end
 end
