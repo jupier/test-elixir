@@ -12,7 +12,7 @@ defmodule JobsService do
   """
   @spec getJobs(Professions.t()) :: Jobs.t()
   def getJobs(professions) do
-    CSVParser.parseJobs(professions)
+    JobParser.parseJobs(professions)
   end
 
   @doc """

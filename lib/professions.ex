@@ -11,7 +11,7 @@ defmodule ProfessionsService do
   """
   @spec getProfessions() :: Professions.t()
   def getProfessions() do
-    CSVParser.parseProfessions()
+    ProfessionParser.parseProfessions()
   end
 
   @doc """
@@ -20,6 +20,17 @@ defmodule ProfessionsService do
   @spec getProfessionCategoryForProfessionId(Professions.t(), Professions.professionId()) ::
           Professions.professionCategory()
   def getProfessionCategoryForProfessionId(professions, professionId) do
-    professions[professionId]
+    case professions do
+      %{^professionId => category} ->
+        category
+    end
+  end
+
+  @spec professionIdExists?(Professions.t(), Professions.professionId()) :: boolean()
+  def(professionIdExists?(professions, professionId)) do
+    case professions do
+      %{^professionId => _} -> true
+      _ -> false
+    end
   end
 end
