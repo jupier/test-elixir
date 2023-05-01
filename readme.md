@@ -1,3 +1,16 @@
+# Description
+
+Hi all 👋
+
+Here is my test carried out in Elixir. This is my first time with Elixir.
+It took me time to discover the language and learn the different concepts. I have a lot of questions 🙂
+
+The sources are present in the `lib` folder and the tests in the `test` folder.
+
+In order to provide clean code, I used few tools (formatter, `dialyzer`, test, github actions). I also tried `credo`
+
+I've split my work into several Pull Requests. You can therefore easily see the evolution of the project in these different PRs.
+
 # Prerequisites
 
 - Install Elixir (v1.14.4). See https://elixir-lang.org/install.html
