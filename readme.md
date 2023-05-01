@@ -41,3 +41,9 @@ You can simply run `mix dialyzer` to launch it.
     [%{name: "toto", brand: "toto"}] |> Enum.map(& &1)
   end
 ```
+
+- How to properly handle errors in the Elixir application?
+
+- I know that it would be possible to create different processes to separate the concerns.
+  As this is my first time with Elixir, I really would like to discuss it with Elixir experts
+  to gather feedback about the current version and understand how processes can help.
