@@ -44,9 +44,13 @@ This project uses [Dialyzer](https://www.erlang.org/doc/man/dialyzer.html) (via 
 
 You can simply run `mix dialyzer` to launch it.
 
+# Scaling
+
+Please find my solution [here](doc/scaling.md)
+
 # Notes/Questions
 
-- Why this code does compile (dialyzer does not complain)?
+- Why dialyzer does not complain?
 
 ```
   @spec test3() :: list(integer())
@@ -54,6 +58,8 @@ You can simply run `mix dialyzer` to launch it.
     [%{name: "toto", brand: "toto"}] |> Enum.map(& &1)
   end
 ```
+
+I noticed that a lib called `TypeCheck` exists for Elixir. Do you recommend it?
 
 - How to properly handle errors in the Elixir application?
 
